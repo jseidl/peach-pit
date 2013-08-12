@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://peachfuzzer.com/2012/Peach ../peach.xsd">
+
+	<DataModel name="ModbusHeader">
+		<Block name="Header">
+		  <!-- Modbus Header -->
+		  <Number name="trans_id" size="16" mutable="false">
+			<Fixup class="SequenceIncrementFixup" />
+		  </Number>
+		  <Number name="proto_id" size="16"  value="0000" valueType="hex"  endian="network" mutable="false" />
+		  <!-- len = PDU + 1 (unit_id) -->
+		  <Number name="len" size="16" value="0006" valueType="hex" endian="network" mutable="false">
+			<Relation type="size" of="PDU+unit_id" />
+		  </Number>
+		  <Number name="unit_id" size="8" value="01" valueType="hex" endian="network" mutable="false" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU1ReadCoilsRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x01 1 Read Coils -->
+		  <Number name="func_code" size="8" value="01" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+<!--
+	<DataModel name="ModbusPDU1ReadCoilsResponse" ref="ModbusHeader">
+		<Block name="PDU">
+		  <Number name="func_code" size="8" value="01" valueType="hex" endian="network" mutable="false" />
+		  <Number name="byte_count" size="8" value="00" valueType="hex" endian="network">
+		  	<Relation type="size" of="coil_status" />
+		  </Number>
+		  <Number name="coil_status" size="16" value="0001" valueType="hex" endian="network" />
+		</Block>
+	</DataModel>
+-->
+	<DataModel name="ModbusPDU2ReadDiscreteInputsRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x02 2 Read Discrete Inputs -->
+		  <Number name="func_code" size="8" value="02" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU3ReadHoldingRegistersRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x03 3 Read Holding Registers (aka Read Multiple Registers) -->
+		  <Number name="func_code" size="8" value="03" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU4ReadInputRegistersRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x04 4 Read Input Registers -->
+		  <Number name="func_code" size="8" value="04" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU5WriteSingleCoilRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x05 5 Write Single Coil -->
+		  <Number name="func_code" size="8" value="05" valueType="hex" endian="network" mutable="false" />
+		  <Number name="output_addr" size="16" value="0000" valueType="hex" endian="network" mutable="true" />
+		  <Number name="output_value" size="16" value="FF00" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU6WriteSingleRegisterRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x06 6 Write Single Register -->
+		  <Number name="func_code" size="8" value="06" valueType="hex" endian="network" mutable="false" />
+		  <Number name="register_addr" size="16" value="0000" valueType="hex" endian="network" mutable="true" />
+		  <Number name="register_value" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU15WriteMultipleCoilsRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x0F 15 Write Multiple Coils -->
+		  <Number name="func_code" size="8" value="0F" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		  <Number name="byte_count" size="8" value="02" valueType="hex" endian="network" mutable="true" />
+		  <Number name="bytes" size="16" value="0050" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU16WriteMultipleRegistersRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x10 16 Write Multiple Registers -->
+		  <Number name="func_code" size="8" value="10" valueType="hex" endian="network" mutable="false" />
+		  <Number name="start_addr" size="16" value="3006" valueType="hex" endian="network" mutable="true" />
+		  <Number name="qty" size="16" value="0001" valueType="hex" endian="network" mutable="true" />
+		  <Number name="byte_count" size="8" value="02" valueType="hex" endian="network" mutable="true" />
+		  <Number name="bytes" size="16" value="CD01" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU20ReadFileRecordRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x14 20 Read File Record -->
+		  <Number name="func_code" size="8" value="14" valueType="hex" endian="network" mutable="false" />
+		  <Number name="byte_count" size="8" value="F5" valueType="hex" endian="network" mutable="true" />
+		  <!-- subreq -->
+		  <Number name="subreq_ref_type" size="8" value="06" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_file_no" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_record_no" size="16" value="270F" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_record_lenght" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU21WriteFileRecordRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x15 21 Write File Record -->
+		  <Number name="func_code" size="8" value="15" valueType="hex" endian="network" mutable="false" />
+		  <Number name="byte_count" size="8" value="F5" valueType="hex" endian="network" mutable="true" />
+		  <!-- subreq -->
+		  <Number name="subreq_ref_type" size="8" value="06" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_file_no" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_record_no" size="16" value="270F" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_record_lenght" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		  <Number name="subreq_record_data" size="32" value="FFFFFFFF" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU22MaskWriteRegisterRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x16 22 Mask Write Register -->
+		  <Number name="func_code" size="8" value="16" valueType="hex" endian="network" mutable="false" />
+		  <Number name="ref_addr" size="16" value="0000" valueType="hex" endian="network" mutable="true" />
+		  <Number name="and_mask" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		  <Number name="or_mask" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU23ReadWriteMultipleRegistersRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x17 23 Read Write Register -->
+		  <Number name="func_code" size="8" value="17" valueType="hex" endian="network" mutable="false" />
+		  <Number name="read_start_addr" size="16" value="0000" valueType="hex" endian="network" mutable="true" />
+		  <Number name="read_qty" size="16" value="007D" valueType="hex" endian="network" mutable="true" />
+		  <Number name="write_start_addr" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		  <Number name="write_qty" size="16" value="0079" valueType="hex" endian="network" mutable="true" />
+		  <Number name="write_byte_count" size="8" value="00" valueType="hex" endian="network" mutable="true" />
+		  <Number name="write_value" size="32" value="00000000" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<DataModel name="ModbusPDU24ReadFIFOQueueRequest" ref="ModbusHeader">
+		<Block name="PDU">
+		  <!-- 0x18 24 Read FIFO Queue -->
+		  <Number name="func_code" size="8" value="18" valueType="hex" endian="network" mutable="false" />
+		  <Number name="fifo_ptr_addr" size="16" value="FFFF" valueType="hex" endian="network" mutable="true" />
+		</Block>
+	</DataModel>
+
+	<StateModel name="ModbusStateModel" initialState="InitialState">
+		<State name="InitialState">
+			<Action type="output">
+				<DataModel ref="ModbusPDU1ReadCoilsRequest" />
+			</Action> 
+			<Action type="output">
+				<DataModel ref="ModbusPDU1ReadCoilsRequest" />
+			</Action> 
+			<Action type="output">
+				<DataModel ref="ModbusPDU2ReadDiscreteInputsRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU3ReadHoldingRegistersRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU4ReadInputRegistersRequest" />
+			</Action>
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU5WriteSingleCoilRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU6WriteSingleRegisterRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU15WriteMultipleCoilsRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU16WriteMultipleRegistersRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU20ReadFileRecordRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU21WriteFileRecordRequest" />
+			</Action> 
+			<Action type="output">
+				<DataModel ref="ModbusPDU22MaskWriteRegisterRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU23ReadWriteMultipleRegistersRequest" />
+			</Action> 
+
+			<Action type="output">
+				<DataModel ref="ModbusPDU24ReadFIFOQueueRequest" /> 
+			</Action> 
+		</State>
+	</StateModel>
+		
+	<Test name="Default">
+		<StateModel ref="ModbusStateModel"/>
+		<Publisher class="ConsoleHex"/>
+	</Test>
+
+<!--	<Test name="Default">
+		<StateModel ref="ModbusStateModel" />
+					
+		<Publisher class="tcp.Tcp">
+			<Param name="Host" value="192.168.1.1"/>
+			<Param name="Port" value="502"/>
+		</Publisher>
+	</Test>-->
+
+</Peach>
+<!-- end -->
